@@ -26,6 +26,9 @@ GPIO.setup(VMOT, GPIO.OUT)
 
 def update_engine(engine):
     value = joy.leftY()
+
+    print("y: {}".format(value))
+
     duty_cycle = value * 100
     engine_in1 = LOW
     engine_in2 = LOW
@@ -35,12 +38,11 @@ def update_engine(engine):
 
     elif value < 0:
         engine_in2 = HIGH
+        duty_cycle = duty_cycle * -1
 
     engine.ChangeDutyCycle(duty_cycle)
     GPIO.output(ENGINE_IN1, engine_in1)
     GPIO.output(ENGINE_IN2, engine_in2)
-
-    print("y: {}".format(value))
 
 
 def update_servo(servo):
