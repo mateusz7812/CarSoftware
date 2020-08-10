@@ -87,6 +87,6 @@ if __name__ == '__main__':
     engine_handler.stop()
     servo_handler.stop()
 
-    GPIO.cleanup()
-
     teardown_driver()
+
+    GPIO.cleanup()
