@@ -4,45 +4,42 @@ import RPi.GPIO as GPIO
 
 import xbox
 
-AIN1 = 2
-AIN2 = 3
-ENGINE_PWM = 4
+ENGINE_IN1 = 10
+ENGINE_IN2 = 9
+ENGINE_PWM = 11
 SERVO_PWM = 17
-STBY = 10
-VMOT = 10
+STBY = 27
+VMOT = 22
 
 HIGH = GPIO.HIGH
 LOW = GPIO.LOW
 
 GPIO.setmode(GPIO.BCM)
 
-GPIO.setup(AIN1, GPIO.OUT)
-GPIO.setup(AIN2, GPIO.OUT)
+GPIO.setup(ENGINE_IN1, GPIO.OUT)
+GPIO.setup(ENGINE_IN2, GPIO.OUT)
 GPIO.setup(ENGINE_PWM, GPIO.OUT)
 GPIO.setup(SERVO_PWM, GPIO.OUT)
 GPIO.setup(STBY, GPIO.OUT)
 GPIO.setup(VMOT, GPIO.OUT)
 
 
-def setAIN(ain1, ain2):
-    GPIO.output(AIN1, ain1)
-    GPIO.output(AIN2, ain2)
-
-
-def setPWM(handler, value):
-    handler.ChangeDutyCycle(value * 100)
-
-
 def update_engine(engine):
     value = joy.leftY()
-    if value == 0:
-        setAIN(LOW, LOW)
-    elif value > 0:
-        setAIN(HIGH, LOW)
-        setPWM(engine, value)
-    else:
-        setAIN(LOW, HIGH)
-        setPWM(engine, value * (-1))
+    duty_cycle = value * 100
+    engine_in1 = LOW
+    engine_in2 = LOW
+
+    if value > 0:
+        engine_in1 = HIGH
+
+    elif value < 0:
+        engine_in2 = HIGH
+
+    engine.ChangeDutyCycle(duty_cycle)
+    GPIO.output(ENGINE_IN1, engine_in1)
+    GPIO.output(ENGINE_IN2, engine_in2)
+
     print("y: " + value)
 
 
@@ -75,7 +72,7 @@ if __name__ == '__main__':
     engine_handler = GPIO.PWM(ENGINE_PWM, 100)
     engine_handler.start(0)
 
-    servo_handler = GPIO.PWM(SERVO_PWM, 100)
+    servo_handler = GPIO.PWM(SERVO_PWM, 50)
     servo_handler.start(6)
 
     while not joy.Back():
