@@ -40,14 +40,14 @@ def update_engine(engine):
     GPIO.output(ENGINE_IN1, engine_in1)
     GPIO.output(ENGINE_IN2, engine_in2)
 
-    print("y: " + value)
+    print("y: {}".format(value))
 
 
 def update_servo(servo):
     value = joy.leftX()
     pwm_value = (3 * value) + 6
     servo.ChangeDutyCycle(pwm_value)
-    print("x:" + value)
+    print("x: {}".format(value))
 
 
 def setup_driver():
