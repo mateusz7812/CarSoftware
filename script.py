@@ -49,7 +49,7 @@ def update_servo(servo):
     value = joy.leftX()
     pwm_value = (3 * value) + 6
     servo.ChangeDutyCycle(pwm_value)
-    print("x: {}".format(value))
+    print("x: {}, pwm: {}".format(value, pwm_value))
 
 
 def setup_driver():
