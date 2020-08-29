@@ -47,7 +47,7 @@ def update_engine(engine):
 
 def update_servo(servo):
     value = joy.leftX()
-    pwm_value = (3 * value) + 6.5
+    pwm_value = 6.5 - (3 * value)
     servo.ChangeDutyCycle(pwm_value)
     print("x: {}, pwm: {}".format(value, pwm_value))
 
