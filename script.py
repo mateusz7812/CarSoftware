@@ -8,8 +8,6 @@ ENGINE_IN1 = 10
 ENGINE_IN2 = 9
 ENGINE_PWM = 11
 SERVO_PWM = 17
-STBY = 27
-VMOT = 22
 
 HIGH = GPIO.HIGH
 LOW = GPIO.LOW
@@ -20,9 +18,6 @@ GPIO.setup(ENGINE_IN1, GPIO.OUT)
 GPIO.setup(ENGINE_IN2, GPIO.OUT)
 GPIO.setup(ENGINE_PWM, GPIO.OUT)
 GPIO.setup(SERVO_PWM, GPIO.OUT)
-GPIO.setup(STBY, GPIO.OUT)
-GPIO.setup(VMOT, GPIO.OUT)
-
 
 def update_engine(engine):
     value = joy.leftY()
@@ -52,23 +47,7 @@ def update_servo(servo):
     print("x: {}, pwm: {}".format(value, pwm_value))
 
 
-def setup_driver():
-    GPIO.output(VMOT, HIGH)
-    time.sleep(1)
-    GPIO.output(STBY, HIGH)
-    time.sleep(1)
-
-
-def teardown_driver():
-    time.sleep(1)
-    GPIO.output(STBY, LOW)
-    time.sleep(1)
-    GPIO.output(VMOT, LOW)
-
-
 if __name__ == '__main__':
-    setup_driver()
-
     joy = xbox.Joystick(10)
 
     engine_handler = GPIO.PWM(ENGINE_PWM, 100)
@@ -86,7 +65,5 @@ if __name__ == '__main__':
 
     engine_handler.stop()
     servo_handler.stop()
-
-    teardown_driver()
 
     GPIO.cleanup()
